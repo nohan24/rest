@@ -2,6 +2,7 @@ package itu.auth;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.io.IOException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -46,10 +47,18 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
 
-        }catch (Exception e){
+        }catch(ExpiredJwtException e){
+            errorDetails.put("message", "Authentication Error");
+            errorDetails.put("expired",e.getMessage());
+            try {
+                mapper.writeValue(response.getWriter(), errorDetails);
+            } catch (java.io.IOException ex) {
+                throw new RuntimeException(ex);
+            }
+        } catch (Exception e){
             errorDetails.put("message", "Authentication Error");
             errorDetails.put("details",e.getMessage());
-            System.out.println(e.getMessage());
+            errorDetails.put("error", 69);
             try {
                 mapper.writeValue(response.getWriter(), errorDetails);
             } catch (java.io.IOException ex) {

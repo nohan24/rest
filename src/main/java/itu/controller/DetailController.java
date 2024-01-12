@@ -50,7 +50,7 @@ public class DetailController {
         voitureServices.deleteMarqueAll();
     }
 
-    @DeleteMapping("/marques/id")
+    @DeleteMapping("/marques/{id}")
     public void deleteMarque(@PathVariable("id")String id){
         voitureServices.deleteMarque(id);
     }
@@ -60,15 +60,21 @@ public class DetailController {
         voitureServices.deleteCategorieAll();
     }
 
-    @DeleteMapping("/carburants")
-    public void deleteCarburants(){
-        voitureServices.deleteCarburantAll();
+    @DeleteMapping("/categories/{id}")
+    public void deleteCategorie(@PathVariable("id")String id){
+        voitureServices.deleteCategorie(id);
     }
 
     @DeleteMapping("/transmissions")
     public void deleteTransmissions(){
         voitureServices.deleteTransmissionAll();
     }
+
+    @DeleteMapping("/transmissions/{id}")
+    public void deleteTransmission(@PathVariable("id")String id){
+        voitureServices.deleteTransmission(id);
+    }
+
 
     @DeleteMapping("/modeles")
     public void deleteModeles(){
@@ -80,30 +86,29 @@ public class DetailController {
         voitureServices.deleteEquipementAll();
     }
 
-    @DeleteMapping("/categories/id")
-    public void deleteCategorie(@PathVariable("id")String id){
-        voitureServices.deleteCategorie(id);
-    }
 
-    @DeleteMapping("/carburants/id")
-    public void deleteCarburant(@PathVariable("id")String id){
-        voitureServices.deleteCarburant(id);
-    }
-
-    @DeleteMapping("/transmissions/id")
-    public void deleteTransmission(@PathVariable("id")String id){
-        voitureServices.deleteTransmission(id);
-    }
-
-    @DeleteMapping("/modeles/id")
+    @DeleteMapping("/modeles/{id}")
     public void deleteModele(@PathVariable("id")String id){
         voitureServices.deleteModele(id);
     }
 
-    @DeleteMapping("/equipements/id")
+    @DeleteMapping("/equipements/{id}")
     public void deleteEquipement(@PathVariable("id")String id){
         voitureServices.deleteEquipement(id);
     }
+
+
+    @DeleteMapping("/carburants/{id}")
+    public void deleteCarburant(@PathVariable("id")String id){
+        voitureServices.deleteCarburant(id);
+    }
+
+
+    @DeleteMapping("/carburants")
+    public void deleteCarburants(){
+        voitureServices.deleteCarburantAll();
+    }
+
 
     @PostMapping("/categories")
     public ResponseEntity<?> insertCategorie(String categorie){

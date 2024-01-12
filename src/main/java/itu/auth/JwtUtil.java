@@ -64,7 +64,7 @@ public class JwtUtil {
         return null;
     }
 
-    public boolean validateClaims(Claims claims) throws AuthenticationException {
+    public boolean validateClaims(Claims claims) throws ExpiredJwtException {
         try {
             return claims.getExpiration().after(new Date());
         } catch (Exception e) {
