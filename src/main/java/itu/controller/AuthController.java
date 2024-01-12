@@ -26,7 +26,6 @@ public class AuthController {
     @PostMapping("/auth/login")
     @CrossOrigin(origins = "*", allowedHeaders = "*")
     public ResponseEntity login(String email, String password){
-        BCryptPasswordEncoder b = new BCryptPasswordEncoder();
         try {
             Authentication authentication =
                     authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));

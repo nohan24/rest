@@ -1,4 +1,4 @@
-package itu.repository;
+package itu.repository.nosql;
 
 import itu.entity.nosql.Detail;
 import org.springframework.data.mongodb.repository.MongoRepository;

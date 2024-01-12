@@ -2,7 +2,7 @@ package itu.entity;
 
 import itu.entity.nosql.Detail;
 import itu.entity.sql.Voiture;
-import itu.repository.DetailRepository;
+import itu.repository.nosql.DetailRepository;
 import itu.repository.VoitureRepository;
 
 import java.util.ArrayList;

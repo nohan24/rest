@@ -1,18 +1,20 @@
 package itu.entity.sql;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
+
 import java.util.Date;
 
 @Entity
 public class Voiture {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "voiture_generator")
+    @SequenceGenerator(name = "voiture_generator", sequenceName = "voiture_seq", allocationSize = 1)
     private Integer id;
     private String caracteristiqueID;
+    @CreationTimestamp
     private Date dateCreation;
+    @CreationTimestamp
     private Date dateValidation;
     private double prix;
     private int etat;

@@ -1,6 +1,6 @@
 package itu.controller;
 
-import itu.repository.DetailRepository;
+import itu.repository.nosql.DetailRepository;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
