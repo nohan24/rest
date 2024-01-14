@@ -1,6 +1,8 @@
 package itu.services;
 
 import itu.entity.nosql.*;
+import itu.entity.sql.Commission;
+import itu.repository.CommissionRepo;
 import itu.repository.nosql.*;
 import itu.repository.VoitureRepository;
 import org.springframework.stereotype.Service;
@@ -17,7 +19,8 @@ public class VoitureServices {
     private final CategorieRepo categorieRepo;
     private final MarqueRepo marqueRepo;
     private final EquipementRepo equipementRepo;
-    public VoitureServices(VoitureRepository voitureRepository, DetailRepository detailRepository, ModeleRepo modeleRepo, CarburantRepo carburantRepo, TransmissionRepo transmissionRepo, CategorieRepo categorieRepo, MarqueRepo marqueRepo, EquipementRepo equipementRepo) {
+    private final CommissionRepo commissionRepo;
+    public VoitureServices(VoitureRepository voitureRepository, DetailRepository detailRepository, ModeleRepo modeleRepo, CarburantRepo carburantRepo, TransmissionRepo transmissionRepo, CategorieRepo categorieRepo, MarqueRepo marqueRepo, EquipementRepo equipementRepo, CommissionRepo commissionRepo) {
         this.voitureRepository = voitureRepository;
         this.detailRepository = detailRepository;
         this.modeleRepo = modeleRepo;
@@ -26,6 +29,7 @@ public class VoitureServices {
         this.categorieRepo = categorieRepo;
         this.marqueRepo = marqueRepo;
         this.equipementRepo = equipementRepo;
+        this.commissionRepo = commissionRepo;
     }
 
     public List<Marque> getMarques(){
@@ -143,5 +147,11 @@ public class VoitureServices {
 
     public ModeleBase insertModele(ModeleBase modele){
         return modeleRepo.insert(modele);
+    }
+
+    public void updateCommission(double valeur) throws Exception {
+        Commission c = commissionRepo.findAll().get(0);
+        c.setValeur(valeur);
+        commissionRepo.save(c);
     }
 }

@@ -256,4 +256,14 @@ public class DetailController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
+
+    @PutMapping("/commissions")
+    public ResponseEntity<String> updateCommission(double valeur){
+        try {
+            voitureServices.updateCommission(valeur);
+            return ResponseEntity.status(HttpStatus.OK).body("Valeur modifiée.");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+    }
 }
