@@ -1,6 +1,7 @@
 package itu.controller;
 
 import itu.entity.nosql.*;
+import itu.entity.sql.Commission;
 import itu.services.VoitureServices;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -265,5 +266,10 @@ public class DetailController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
+    }
+
+    @GetMapping("/commissions")
+    public Commission getCommission(){
+        return voitureServices.getCommission();
     }
 }

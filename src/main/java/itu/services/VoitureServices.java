@@ -154,4 +154,8 @@ public class VoitureServices {
         c.setValeur(valeur);
         commissionRepo.save(c);
     }
+
+    public Commission getCommission(){
+        return commissionRepo.findAll().get(0);
+    }
 }
