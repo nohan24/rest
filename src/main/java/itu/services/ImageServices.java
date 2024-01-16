@@ -1,12 +1,16 @@
 package itu.services;
 
-import org.hibernate.internal.util.MutableLong;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,4 +34,26 @@ public class ImageServices {
         }
         return ret;
     }
+
+    public ResponseEntity<byte[]> downloadImage(String path) throws IOException {
+        byte[] imageBytes = Files.readAllBytes(Paths.get(UPLOAD_DIR + "/" + path));
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(determineMediaType(path));
+        headers.setContentLength(imageBytes.length);
+        return new ResponseEntity<>(imageBytes, headers, HttpStatus.OK);
+    }
+
+    public MediaType determineMediaType(String imageName) {
+        if (imageName.endsWith(".jpg") || imageName.endsWith(".jpeg")) {
+            return MediaType.IMAGE_JPEG;
+        } else if (imageName.endsWith(".png")) {
+            return MediaType.IMAGE_PNG;
+        } else if (imageName.endsWith(".gif")) {
+            return MediaType.IMAGE_GIF;
+        } else {
+            return MediaType.APPLICATION_OCTET_STREAM;
+        }
+    }
+
+
 }
