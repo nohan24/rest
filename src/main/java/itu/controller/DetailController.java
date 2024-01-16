@@ -14,7 +14,6 @@ import java.util.List;
 @RestController
 public class DetailController {
     private final VoitureServices voitureServices;
-
     public DetailController(VoitureServices voitureServices) {
         this.voitureServices = voitureServices;
     }
@@ -26,6 +25,7 @@ public class DetailController {
             Marque r = voitureServices.insertMarque(m);
             return ResponseEntity.status(HttpStatus.OK).body(r);
         } catch (Exception e) {
+            e.printStackTrace();
             if(e.getMessage().contains("11000")){
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Cette marque existe déjà.");
             }

@@ -32,7 +32,10 @@ public class SecurityConfig {
                     .authorizeHttpRequests(request -> request.requestMatchers(HttpMethod.POST,"/details/**").hasRole("ADMIN"))
                     .authorizeHttpRequests(request -> request.requestMatchers(HttpMethod.DELETE,"/details/**").hasRole("ADMIN"))
                     .authorizeHttpRequests(request -> request.requestMatchers(HttpMethod.GET, "/details/**").permitAll())
-                    .authorizeHttpRequests(request -> request.requestMatchers("/annonces").authenticated())
+                    .authorizeHttpRequests(request -> request.requestMatchers(HttpMethod.GET,"/user/annonces").permitAll())
+                    .authorizeHttpRequests(request -> request.requestMatchers(HttpMethod.GET,"/user/{id}/annonces").permitAll())
+                    .authorizeHttpRequests(request -> request.requestMatchers(HttpMethod.POST,"/user/**").authenticated())
+                    .authorizeHttpRequests(request -> request.requestMatchers(HttpMethod.DELETE,"/user/**").authenticated())
                     .authorizeHttpRequests(request -> request.requestMatchers("/images/**").permitAll())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class);

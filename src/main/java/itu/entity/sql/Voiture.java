@@ -19,6 +19,17 @@ public class Voiture {
     private Date dateValidation;
     @Column(nullable = false)
     private double prix;
+    @Column(nullable = false)
+    private int owner;
+
+    public int getOwner() {
+        return owner;
+    }
+
+    public void setOwner(int owner) {
+        this.owner = owner;
+    }
+
     private int etat = 100;
 
     public String getCaracteristiqueID() {

@@ -42,10 +42,9 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
             Claims claims = jwtUtil.resolveClaims(request);
 
             if(claims != null & jwtUtil.validateClaims(claims)){
-
                 String email = claims.getSubject();
                 Authentication authentication =
-                        new UsernamePasswordAuthenticationToken(email,null, convertRolesToAuthorities(claims.get("roles").toString()));
+                        new UsernamePasswordAuthenticationToken(email,claims.get("user"), convertRolesToAuthorities(claims.get("roles").toString()));
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
 
@@ -58,6 +57,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
                 throw new RuntimeException(ex);
             }
         } catch (Exception e){
+            e.printStackTrace();
             errorDetails.put("message", "Authentication Error");
             errorDetails.put("details",e.getMessage());
             errorDetails.put("error", 69);
@@ -75,7 +75,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         roleList.add(roles);
 
         return roleList.stream()
-                .map(role -> new SimpleGrantedAuthority(role.trim()))
+                .map(role -> new SimpleGrantedAuthority("ROLE_" + role.trim()))
                 .collect(Collectors.toList());
     }
 }

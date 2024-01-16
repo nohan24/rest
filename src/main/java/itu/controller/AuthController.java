@@ -4,6 +4,7 @@ import itu.auth.ErrorRes;
 import itu.auth.JwtUtil;
 import itu.auth.LoginRes;
 import itu.entity.sql.Utilisateur;
+import itu.repository.UtilisateurRepository;
 import itu.services.RegisterServices;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,26 +23,21 @@ import java.util.stream.Collectors;
 public class AuthController {
     private final AuthenticationManager authenticationManager;
     private final JwtUtil jwtUtil;
+    private final UtilisateurRepository utilisateurRepository;
     private final RegisterServices registerServices;
-    public AuthController(AuthenticationManager authenticationManager, JwtUtil jwtUtil, RegisterServices registerServices) {
+    public AuthController(AuthenticationManager authenticationManager, JwtUtil jwtUtil, UtilisateurRepository utilisateurRepository, RegisterServices registerServices) {
         this.authenticationManager = authenticationManager;
         this.jwtUtil = jwtUtil;
+        this.utilisateurRepository = utilisateurRepository;
         this.registerServices = registerServices;
     }
 
     @PostMapping("/auth/login")
-    @CrossOrigin(origins = "*", allowedHeaders = "*")
     public ResponseEntity login(String email, String password){
         try {
             Authentication authentication =
                     authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
-            String role = authentication.getAuthorities().stream()
-                    .map(GrantedAuthority::getAuthority)
-                    .collect(Collectors.toList()).get(0);
-            String mail = authentication.getName();
-            Utilisateur user = new Utilisateur();
-            user.setEmail(mail);
-            user.setRoles(role);
+            Utilisateur user = utilisateurRepository.findByEmail(email);
             String token = jwtUtil.createToken(user);
             LoginRes loginRes = new LoginRes(email,token);
             return ResponseEntity.ok(loginRes);

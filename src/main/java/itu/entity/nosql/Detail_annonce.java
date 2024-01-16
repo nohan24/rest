@@ -6,7 +6,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import java.util.List;
 
 @Document(collection = "detail")
-public class Annonce extends Detail{
+public class Detail_annonce extends Detail{
     @Id
     private String _id;
     private Detailelectrique detailelectrique;

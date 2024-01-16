@@ -1,7 +1,8 @@
 package itu.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import itu.entity.nosql.Annonce;
+import itu.entity.Annonce;
+import itu.entity.nosql.Detail_annonce;
 import itu.entity.nosql.Detailelectrique;
 import itu.services.AnnonceServices;
 import org.springframework.http.HttpStatus;
@@ -22,13 +23,13 @@ public class AnnonceController {
         this.annonceServices = annonceServices;
     }
 
-    @PostMapping("/annonces")
+    @PostMapping("/user/annonces")
     public ResponseEntity<?> insertAnnonce(@RequestPart(name = "images") List<MultipartFile> images, String detail, @RequestPart(name = "detailelectrique", required = false)String detailelectrique, double prix){
         ObjectMapper objectMapper = new ObjectMapper();
-        Annonce objet = null;
+        Detail_annonce objet = null;
         Detailelectrique electrique = null;
         try {
-            objet = objectMapper.readValue(detail, Annonce.class);
+            objet = objectMapper.readValue(detail, Detail_annonce.class);
             electrique = detailelectrique != null ? objectMapper.readValue(detailelectrique, Detailelectrique.class) : null;
             annonceServices.insertAnnonce(objet, electrique,images, prix);
             return ResponseEntity.status(HttpStatus.OK).body("Annonce ajouté avec succès.");
@@ -41,8 +42,14 @@ public class AnnonceController {
         }
     }
 
-    @GetMapping("/annonces")
-    public void getAnnonces(){
+    @GetMapping("/user/annonces")
+    public List<Annonce> getAnnoncesAdmin(){
+        return annonceServices.getAnnonces();
+    }
+
+
+    @GetMapping("/user/{id}/annonces")
+    public void mesAnnonces(){
 
     }
 }
