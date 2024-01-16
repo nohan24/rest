@@ -2,7 +2,6 @@ package itu.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import itu.entity.nosql.Annonce;
-import itu.entity.nosql.Detail;
 import itu.entity.nosql.Detailelectrique;
 import itu.services.AnnonceServices;
 import org.springframework.http.HttpStatus;
@@ -12,7 +11,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.io.IOException;
 import java.util.List;
 
