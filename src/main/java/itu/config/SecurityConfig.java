@@ -29,8 +29,10 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
             http.csrf(AbstractHttpConfigurer::disable)
                     .authorizeHttpRequests(request -> request.requestMatchers("/auth/**").permitAll())
-                    .authorizeHttpRequests(request -> request.requestMatchers(HttpMethod.GET, "/marques/**", "/categories/**", "/carburants/**", "/equipements/**", "/transmissions/**","/modeles/**").permitAll())
-                    .authorizeHttpRequests(authorizationManagerRequestMatcherRegistry -> authorizationManagerRequestMatcherRegistry.anyRequest().authenticated())
+                    .authorizeHttpRequests(request -> request.requestMatchers(HttpMethod.POST,"/details/**").hasRole("ADMIN"))
+                    .authorizeHttpRequests(request -> request.requestMatchers(HttpMethod.DELETE,"/details/**").hasRole("ADMIN"))
+                    .authorizeHttpRequests(request -> request.requestMatchers(HttpMethod.GET, "/details/**").permitAll())
+                    .authorizeHttpRequests(request -> request.requestMatchers("/annonces").authenticated())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class);
             return http.build();

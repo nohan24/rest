@@ -1,10 +1,9 @@
 package itu.auth;
 
 import io.jsonwebtoken.*;
-import itu.entity.sql.Admin;
+import itu.entity.sql.Utilisateur;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.core.env.Environment;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Component;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
@@ -24,9 +23,11 @@ public class JwtUtil {
         this.env = env;
     }
 
-    public String createToken(Admin user) {
+    public String createToken(Utilisateur user) {
         Claims claims = Jwts.claims().setSubject(user.getEmail());
         Date tokenCreateTime = new Date();
+        System.out.println(user.getRoles());
+        claims.put("roles", user.getRoles());
         Date tokenValidity = new Date(tokenCreateTime.getTime() + TimeUnit.MINUTES.toMillis(accessTokenValidity));
         return Jwts.builder()
                 .setClaims(claims)
@@ -70,10 +71,6 @@ public class JwtUtil {
         } catch (Exception e) {
             throw e;
         }
-    }
-
-    public String getEmail(Claims claims) {
-        return claims.getSubject();
     }
 
 }

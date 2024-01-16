@@ -12,7 +12,7 @@ import java.util.List;
 @Service
 public class VoitureServices {
     private final VoitureRepository voitureRepository;
-    private final DetailRepository detailRepository;
+    private final AnnonceRepository annonceRepository;
     private final ModeleRepo modeleRepo;
     private final CarburantRepo carburantRepo;
     private final TransmissionRepo transmissionRepo;
@@ -20,9 +20,9 @@ public class VoitureServices {
     private final MarqueRepo marqueRepo;
     private final EquipementRepo equipementRepo;
     private final CommissionRepo commissionRepo;
-    public VoitureServices(VoitureRepository voitureRepository, DetailRepository detailRepository, ModeleRepo modeleRepo, CarburantRepo carburantRepo, TransmissionRepo transmissionRepo, CategorieRepo categorieRepo, MarqueRepo marqueRepo, EquipementRepo equipementRepo, CommissionRepo commissionRepo) {
+    public VoitureServices(VoitureRepository voitureRepository, AnnonceRepository annonceRepository, ModeleRepo modeleRepo, CarburantRepo carburantRepo, TransmissionRepo transmissionRepo, CategorieRepo categorieRepo, MarqueRepo marqueRepo, EquipementRepo equipementRepo, CommissionRepo commissionRepo) {
         this.voitureRepository = voitureRepository;
-        this.detailRepository = detailRepository;
+        this.annonceRepository = annonceRepository;
         this.modeleRepo = modeleRepo;
         this.carburantRepo = carburantRepo;
         this.transmissionRepo = transmissionRepo;

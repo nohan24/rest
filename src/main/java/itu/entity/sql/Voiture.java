@@ -11,13 +11,15 @@ public class Voiture {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "voiture_generator")
     @SequenceGenerator(name = "voiture_generator", sequenceName = "voiture_seq", allocationSize = 1)
     private Integer id;
+    @Column(nullable = false)
     private String caracteristiqueID;
     @CreationTimestamp
     private Date dateCreation;
     @CreationTimestamp
     private Date dateValidation;
+    @Column(nullable = false)
     private double prix;
-    private int etat;
+    private int etat = 100;
 
     public String getCaracteristiqueID() {
         return caracteristiqueID;

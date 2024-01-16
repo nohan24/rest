@@ -15,5 +15,13 @@ public class Modele {
     }
     String modele;
     String edition;
+     public Modele(){
+
+     }
+
+     public Modele(String modele, String edition){
+         this.modele = modele;
+         this.edition = edition;
+     }
 }
 

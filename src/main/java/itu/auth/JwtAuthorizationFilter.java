@@ -10,12 +10,14 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Component
 public class JwtAuthorizationFilter extends OncePerRequestFilter {
@@ -43,7 +45,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
                 String email = claims.getSubject();
                 Authentication authentication =
-                        new UsernamePasswordAuthenticationToken(email,"",new ArrayList<>());
+                        new UsernamePasswordAuthenticationToken(email,null, convertRolesToAuthorities(claims.get("roles").toString()));
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
 
@@ -64,8 +66,16 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
             } catch (java.io.IOException ex) {
                 throw new RuntimeException(ex);
             }
-
         }
         filterChain.doFilter(request, response);
+    }
+
+    public static Collection<? extends GrantedAuthority> convertRolesToAuthorities(String roles) {
+        List<String> roleList = new ArrayList<>();
+        roleList.add(roles);
+
+        return roleList.stream()
+                .map(role -> new SimpleGrantedAuthority(role.trim()))
+                .collect(Collectors.toList());
     }
 }

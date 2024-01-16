@@ -1,14 +1,13 @@
 package itu.entity.nosql;
 
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
+import lombok.Getter;
+import lombok.Setter;
 
-@Document(collection = "detail")
+@Getter
+@Setter
 public class Detail {
-    @Id
-    private String _id;
     private String marque;
-    private Modele modele;
+    private String modele;
     private String categorie;
     private int kilometrage;
     private int puissance_fiscale;
@@ -16,8 +15,9 @@ public class Detail {
     private String transmission;
     private String carburant;
     private int annee_fabrication;
-    private Detailelectrique detailelectrique;
     private String description_supplementaire;
+    private int portes;
+    private int places;
     private String[] equipement;
-    private String path_image_couverture;
+
 }
