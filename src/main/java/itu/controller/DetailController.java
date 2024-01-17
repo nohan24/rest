@@ -17,7 +17,7 @@ public class DetailController {
     public DetailController(VoitureServices voitureServices) {
         this.voitureServices = voitureServices;
     }
-    @PostMapping("/details/marques")
+    @PostMapping("/marques")
     public ResponseEntity<?> insertMarque(String marque){
         Marque m = new Marque();
         try {
@@ -33,12 +33,12 @@ public class DetailController {
         }
     }
 
-    @GetMapping("/details/marques")
+    @GetMapping("/marques")
     public List<Marque> allMarques(){
         return voitureServices.getMarques();
     }
 
-    @GetMapping("/details/marques/{id}")
+    @GetMapping("/marques/{id}")
     public ResponseEntity<?> findMarques(@PathVariable("id")String id){
         try {
             return ResponseEntity.status(HttpStatus.OK).body(voitureServices.findMarque(id));
@@ -47,72 +47,72 @@ public class DetailController {
         }
     }
 
-    @DeleteMapping("/details/marques")
+    @DeleteMapping("/marques")
     public void deleteMarques(){
         voitureServices.deleteMarqueAll();
     }
 
-    @DeleteMapping("/details/marques/{id}")
+    @DeleteMapping("/marques/{id}")
     public void deleteMarque(@PathVariable("id")String id){
         voitureServices.deleteMarque(id);
     }
 
-    @DeleteMapping("/details/categories")
+    @DeleteMapping("/categories")
     public void deleteCategories(){
         voitureServices.deleteCategorieAll();
     }
 
-    @DeleteMapping("/details/categories/{id}")
+    @DeleteMapping("/categories/{id}")
     public void deleteCategorie(@PathVariable("id")String id){
         voitureServices.deleteCategorie(id);
     }
 
-    @DeleteMapping("/details/transmissions")
+    @DeleteMapping("/transmissions")
     public void deleteTransmissions(){
         voitureServices.deleteTransmissionAll();
     }
 
-    @DeleteMapping("/details/transmissions/{id}")
+    @DeleteMapping("/transmissions/{id}")
     public void deleteTransmission(@PathVariable("id")String id){
         voitureServices.deleteTransmission(id);
     }
 
 
-    @DeleteMapping("/details/modeles")
+    @DeleteMapping("/modeles")
     public void deleteModeles(){
         voitureServices.deleteModeleAll();
     }
 
-    @DeleteMapping("/details/equipements")
+    @DeleteMapping("/equipements")
     public void deleteEquipements(){
         voitureServices.deleteEquipementAll();
     }
 
 
-    @DeleteMapping("/details/modeles/{id}")
+    @DeleteMapping("/modeles/{id}")
     public void deleteModele(@PathVariable("id")String id){
         voitureServices.deleteModele(id);
     }
 
-    @DeleteMapping("/details/equipements/{id}")
+    @DeleteMapping("/equipements/{id}")
     public void deleteEquipement(@PathVariable("id")String id){
         voitureServices.deleteEquipement(id);
     }
 
 
-    @DeleteMapping("/details/carburants/{id}")
+    @DeleteMapping("/carburants/{id}")
     public void deleteCarburant(@PathVariable("id")String id){
         voitureServices.deleteCarburant(id);
     }
 
 
-    @DeleteMapping("/details/carburants")
+    @DeleteMapping("/carburants")
     public void deleteCarburants(){
         voitureServices.deleteCarburantAll();
     }
 
 
-    @PostMapping("/details/categories")
+    @PostMapping("/categories")
     public ResponseEntity<?> insertCategorie(String categorie){
         Categorie m = new Categorie();
         try {
@@ -127,7 +127,7 @@ public class DetailController {
         }
     }
 
-    @PostMapping("/details/carburants")
+    @PostMapping("/carburants")
     public ResponseEntity<?> insertCarburant(String carburant){
         Carburant m = new Carburant();
         try {
@@ -142,7 +142,7 @@ public class DetailController {
         }
     }
 
-    @PostMapping("/details/modeles")
+    @PostMapping("/modeles")
     public ResponseEntity<?> insertTransmission(String idmarque, String modele){
         ModeleBase m = new ModeleBase();
         try {
@@ -159,7 +159,7 @@ public class DetailController {
         }
     }
 
-    @PostMapping("/details/transmissions")
+    @PostMapping("/transmissions")
     public ResponseEntity<?> insertTransmission(String transmission){
         Transmission m = new Transmission();
         try {
@@ -174,7 +174,7 @@ public class DetailController {
         }
     }
 
-    @PostMapping("/details/equipements")
+    @PostMapping("/equipements")
     public ResponseEntity<?> insertEquipement(String equipement){
         try {
             Equipement m = new Equipement();
@@ -189,12 +189,12 @@ public class DetailController {
         }
     }
 
-    @GetMapping("/details/equipements")
+    @GetMapping("/equipements")
     public List<Equipement> allEquipements(){
         return voitureServices.getEquipements();
     }
 
-    @GetMapping("/details/equipements/{id}")
+    @GetMapping("/equipements/{id}")
     public ResponseEntity<?> findEquipement(@PathVariable("id")String id){
         try {
             return ResponseEntity.status(HttpStatus.OK).body(voitureServices.findEquipement(id));
@@ -203,12 +203,12 @@ public class DetailController {
         }
     }
 
-    @GetMapping("/details/modeles")
+    @GetMapping("/modeles")
     public List<ModeleBase> allModeles(){
         return voitureServices.getModeles();
     }
 
-    @GetMapping("/details/modeles/{id}")
+    @GetMapping("/modeles/{id}")
     public ResponseEntity<?> findModele(@PathVariable("id")String id){
         try {
             return ResponseEntity.status(HttpStatus.OK).body(voitureServices.findModele(id));
@@ -217,12 +217,12 @@ public class DetailController {
         }
     }
 
-    @GetMapping("/details/categories")
+    @GetMapping("/categories")
     public List<Categorie> allCategories(){
         return voitureServices.getCategories();
     }
 
-    @GetMapping("/details/categories/{id}")
+    @GetMapping("/categories/{id}")
     public ResponseEntity<?> findCategorie(@PathVariable("id")String id){
         try {
             return ResponseEntity.status(HttpStatus.OK).body(voitureServices.findCategorie(id));
@@ -231,12 +231,12 @@ public class DetailController {
         }
     }
 
-    @GetMapping("/details/carburants")
+    @GetMapping("/carburants")
     public List<Carburant> allCarburants(){
         return voitureServices.getCarburants();
     }
 
-    @GetMapping("/details/carburants/{id}")
+    @GetMapping("/carburants/{id}")
     public ResponseEntity<?> findCarburant(@PathVariable("id")String id){
         try {
             return ResponseEntity.status(HttpStatus.OK).body(voitureServices.findCarburant(id));
@@ -245,12 +245,12 @@ public class DetailController {
         }
     }
 
-    @GetMapping("/details/transmissions")
+    @GetMapping("/transmissions")
     public List<Transmission> allTransmissions(){
         return voitureServices.getTransmissions();
     }
 
-    @GetMapping("/details/transmissions/{id}")
+    @GetMapping("/transmissions/{id}")
     public ResponseEntity<?> findTransmission(@PathVariable("id")String id){
         try {
             return ResponseEntity.status(HttpStatus.OK).body(voitureServices.findTransmission(id));
@@ -259,7 +259,7 @@ public class DetailController {
         }
     }
 
-    @PutMapping("/details/commissions")
+    @PutMapping("/commissions")
     public ResponseEntity<String> updateCommission(double valeur){
         try {
             voitureServices.updateCommission(valeur);
@@ -270,7 +270,7 @@ public class DetailController {
     }
     
 
-    @GetMapping("/details/commissions")
+    @GetMapping("/commissions")
     public Commission getCommission(){
         return voitureServices.getCommission();
     }
