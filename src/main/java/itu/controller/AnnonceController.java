@@ -32,10 +32,8 @@ public class AnnonceController {
             electrique = detailelectrique != null ? objectMapper.readValue(detailelectrique, Detailelectrique.class) : null;
             return ResponseEntity.status(HttpStatus.OK).body(annonceServices.insertAnnonce(objet, electrique,images, prix));
         } catch (IOException e) {
-            e.printStackTrace();
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }catch (Exception e){
-            e.printStackTrace();
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }

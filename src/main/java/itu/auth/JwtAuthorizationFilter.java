@@ -8,6 +8,7 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -30,7 +31,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         this.mapper = mapper;
     }
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException, java.io.IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException, java.io.IOException, ExpiredJwtException {
         Map<String, Object> errorDetails = new HashMap<>();
 
         try {
@@ -49,21 +50,13 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
             }
 
         }catch(ExpiredJwtException e){
-            errorDetails.put("message", "Authentication Error");
-            errorDetails.put("expired",e.getMessage());
+            throw new ExpiredJwtException(e.getHeader(), e.getClaims(), "Token expiré");
+        } catch (AccessDeniedException e){
+            throw new AccessDeniedException("Accès refusé.");
+        }catch (Exception e){
             try {
-                mapper.writeValue(response.getWriter(), errorDetails);
-            } catch (java.io.IOException ex) {
-                throw new RuntimeException(ex);
-            }
-        } catch (Exception e){
-            e.printStackTrace();
-            errorDetails.put("message", "Authentication Error");
-            errorDetails.put("details",e.getMessage());
-            errorDetails.put("error", 69);
-            try {
-                mapper.writeValue(response.getWriter(), errorDetails);
-            } catch (java.io.IOException ex) {
+                throw new Exception(e.getMessage());
+            } catch (Exception ex) {
                 throw new RuntimeException(ex);
             }
         }

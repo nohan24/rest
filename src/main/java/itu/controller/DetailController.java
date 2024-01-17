@@ -6,6 +6,7 @@ import itu.services.VoitureServices;
 import jakarta.annotation.security.RolesAllowed;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,8 +25,10 @@ public class DetailController {
             m.setMarque(marque);
             Marque r = voitureServices.insertMarque(m);
             return ResponseEntity.status(HttpStatus.OK).body(r);
-        } catch (Exception e) {
-            e.printStackTrace();
+        }catch (AccessDeniedException e){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
+        }
+        catch (Exception e) {
             if(e.getMessage().contains("11000")){
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Cette marque existe déjà.");
             }
