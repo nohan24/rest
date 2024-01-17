@@ -53,4 +53,21 @@ public class AnnonceController {
     public List<Annonce> getAnnonceNotValidate(){
         return annonceServices.annonceNotValidate();
     }
+
+    @PutMapping("/validation/annonces/{id}")
+    public ResponseEntity validation(@PathVariable(name = "id") int id){
+        annonceServices.validation(id);
+        return ResponseEntity.ok("Validé");
+    }
+
+    @DeleteMapping("/validation/annonces/{id}")
+    public ResponseEntity refuse(@PathVariable(name = "id") int id){
+        annonceServices.refuser(id);
+        return ResponseEntity.ok("Validé");
+    }
+
+    @GetMapping("/annonces/{id}")
+    public Annonce getAnnonce(@PathVariable(name = "id") int id){
+        return annonceServices.findAnnonce(id);
+    }
 }

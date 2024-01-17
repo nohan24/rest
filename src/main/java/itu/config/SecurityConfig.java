@@ -52,7 +52,6 @@ public class SecurityConfig {
             return http.build();
     }
 
-
     @Bean
     public AuthenticationFailureHandler authenticationFailureHandler() {
         return (request, response, exception) -> {

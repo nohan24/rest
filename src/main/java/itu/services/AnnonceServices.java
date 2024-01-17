@@ -7,13 +7,18 @@ import itu.repository.UtilisateurRepository;
 import itu.repository.VoitureRepository;
 import itu.repository.nosql.*;
 import jakarta.persistence.EntityNotFoundException;
+import org.hibernate.ObjectNotFoundException;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 @Service
 public class AnnonceServices {
@@ -117,4 +122,30 @@ public class AnnonceServices {
         }
         return annonces;
     }
+
+    public Annonce findAnnonce(int id) {
+        Voiture v = voitureRepository.findById(id).get();
+        Annonce ret = new Annonce();
+        ret.setVoiture(v);
+        ret.setDetailAnnonce(annonceRepository.findById(v.getCaracteristiqueID()).get());
+        return ret;
+    }
+
+    public void validation(int id){
+        Voiture v = voitureRepository.findById(id).get();
+        v.setEtat(200);
+        LocalDateTime localDateTime = LocalDateTime.now();
+        v.setDateValidation(Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant()));
+        voitureRepository.save(v);
+    }
+
+    public void refuser(int id){
+        Voiture v = voitureRepository.findById(id).get();
+        v.setEtat(210);
+        LocalDateTime localDateTime = LocalDateTime.now();
+        v.setDateValidation(Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant()));
+        voitureRepository.save(v);
+    }
+
+    // 100 - 200 - 210 - 300 - 310
 }
