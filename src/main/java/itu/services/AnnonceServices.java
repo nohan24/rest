@@ -54,6 +54,9 @@ public class AnnonceServices {
 
     public Detail_annonce insertAnnonce(Detail_annonce detail, Detailelectrique detailelectrique, List<MultipartFile> images, double prix) throws Exception {
         Detail_annonce ret = detail;
+        if(detail.getTitre_voiture() == null)throw new Exception("Titre annonce requis.");
+        if(detail.getKilometrage() == null)throw new Exception("Kilométrage requis.");
+
         ret.setDetailelectrique(detailelectrique);
         ret.setMarque(join((CrudRepository<Marque, String>) marqueRepo, detail.getMarque(), "Marque").getMarque());
         ret.setCarburant(join((CrudRepository<Carburant, String>) carburantRepo, detail.getCarburant(), "Carburant").getCarburant());

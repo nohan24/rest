@@ -11,6 +11,16 @@ public class Detail {
     private String transmission;
     private String carburant;
     private Integer annee_fabrication;
+    private String titre_voiture;
+
+    public String getTitre_voiture() {
+        return titre_voiture;
+    }
+
+    public void setTitre_voiture(String titre_voiture) {
+        this.titre_voiture = titre_voiture;
+    }
+
     private String description_supplementaire;
     private Integer portes = null;
     private Integer places = null;
