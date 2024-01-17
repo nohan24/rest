@@ -34,8 +34,10 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
             http.csrf(AbstractHttpConfigurer::disable)
                     .authorizeHttpRequests(request -> request.requestMatchers("/auth/**").permitAll())
-                    .authorizeHttpRequests(request -> request.requestMatchers(HttpMethod.POST,"/marques/**", "/equipements/**", "/modeles/**", "/transmissions/**", "/carburants/**","/categories/**").hasRole("ADMIN"))
+                    .authorizeHttpRequests(request -> request.requestMatchers(HttpMethod.POST,"/marques/**", "/equipements/**", "/modeles/**", "/transmissions/**", "/carburants/**","/categories/**","/commissions/**").hasRole("ADMIN"))
                     .authorizeHttpRequests(request -> request.requestMatchers(HttpMethod.DELETE,"/marques/**", "/equipements/**", "/modeles/**", "/transmissions/**", "/carburants/**","/categories/**").hasRole("ADMIN"))
+                    .authorizeHttpRequests(request -> request.requestMatchers(HttpMethod.PUT, "/commissions").hasRole("ADMIN"))
+                    .authorizeHttpRequests(request -> request.requestMatchers(HttpMethod.GET, "/commissions").hasRole("ADMIN"))
                     .authorizeHttpRequests(request -> request.requestMatchers("/validation/**").hasRole("ADMIN"))
                     .authorizeHttpRequests(request -> request.requestMatchers(HttpMethod.GET, "/marques/**", "/equipements/**", "/modeles/**", "/transmissions/**", "/carburants/**","/categories/**").permitAll())
                     .authorizeHttpRequests(request -> request.requestMatchers(HttpMethod.POST,"/user/**").authenticated())
