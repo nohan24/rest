@@ -44,6 +44,8 @@ public class SecurityConfig {
                     .authorizeHttpRequests(request -> request.requestMatchers(HttpMethod.DELETE,"/user/**").authenticated())
                     .authorizeHttpRequests(request -> request.requestMatchers(HttpMethod.GET,"/user/**").authenticated())
                     .authorizeHttpRequests(request -> request.requestMatchers(HttpMethod.GET,"/annonces/**").permitAll())
+                    .authorizeHttpRequests(request -> request.requestMatchers(HttpMethod.POST,"/annonces/filtrer").permitAll())
+                    .authorizeHttpRequests(request -> request.requestMatchers(HttpMethod.GET, "/annonces/favoris").authenticated())
                     .authorizeHttpRequests(request -> request.requestMatchers(HttpMethod.POST,"/annonces/**").authenticated())
                     .authorizeHttpRequests(request -> request.requestMatchers("/images/**").permitAll())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

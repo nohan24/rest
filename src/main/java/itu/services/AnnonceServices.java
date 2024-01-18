@@ -1,27 +1,39 @@
 package itu.services;
 
+import com.mongodb.client.AggregateIterable;
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
 import itu.entity.Annonce;
+import itu.entity.Recherche;
 import itu.entity.nosql.*;
+import itu.entity.sql.Favoris;
+import itu.entity.sql.Utilisateur;
 import itu.entity.sql.Voiture;
+import itu.repository.FavorisRepo;
 import itu.repository.UtilisateurRepository;
 import itu.repository.VoitureRepository;
 import itu.repository.nosql.*;
 import jakarta.persistence.EntityNotFoundException;
-import org.hibernate.ObjectNotFoundException;
-import org.springframework.data.crossstore.ChangeSetPersister;
+import org.bson.Document;
+import org.springframework.data.mongodb.core.convert.MongoConverter;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 public class AnnonceServices {
+    final MongoClient client;
+    final FavorisRepo favorisRepo;
+    final MongoConverter converter;
     private final ModeleRepo modeleRepo;
     private final CarburantRepo carburantRepo;
     private final TransmissionRepo transmissionRepo;
@@ -31,7 +43,11 @@ public class AnnonceServices {
     private final AnnonceRepository annonceRepository;
     private final ImageServices imageServices;
     private final VoitureRepository voitureRepository;
-    public AnnonceServices(ModeleRepo modeleRepo, CarburantRepo carburantRepo, TransmissionRepo transmissionRepo, CategorieRepo categorieRepo, MarqueRepo marqueRepo, EquipementRepo equipementRepo, AnnonceRepository annonceRepository, ImageServices imageServices, VoitureRepository voitureRepository) {
+    final UtilisateurRepository utilisateurRepository;
+    public AnnonceServices(MongoClient client, FavorisRepo favorisRepo, MongoConverter converter, ModeleRepo modeleRepo, CarburantRepo carburantRepo, TransmissionRepo transmissionRepo, CategorieRepo categorieRepo, MarqueRepo marqueRepo, EquipementRepo equipementRepo, AnnonceRepository annonceRepository, ImageServices imageServices, VoitureRepository voitureRepository, UtilisateurRepository utilisateurRepository) {
+        this.client = client;
+        this.favorisRepo = favorisRepo;
+        this.converter = converter;
         this.modeleRepo = modeleRepo;
         this.carburantRepo = carburantRepo;
         this.transmissionRepo = transmissionRepo;
@@ -41,6 +57,7 @@ public class AnnonceServices {
         this.annonceRepository = annonceRepository;
         this.imageServices = imageServices;
         this.voitureRepository = voitureRepository;
+        this.utilisateurRepository = utilisateurRepository;
     }
 
     private <T> T join(CrudRepository<T, String> repository, String id, String entityName) throws Exception {
@@ -58,10 +75,10 @@ public class AnnonceServices {
     }
 
     public Detail_annonce insertAnnonce(Detail_annonce detail, Detailelectrique detailelectrique, List<MultipartFile> images, double prix) throws Exception {
+        if(detail.getPlaces() == null || detail.getPlaces() == 0)throw new Exception("Nombre de place requis.");
         Detail_annonce ret = detail;
         if(detail.getTitre_voiture() == null)throw new Exception("Titre annonce requis.");
         if(detail.getKilometrage() == null)throw new Exception("Kilométrage requis.");
-
         ret.setDetailelectrique(detailelectrique);
         ret.setMarque(join((CrudRepository<Marque, String>) marqueRepo, detail.getMarque(), "Marque").getMarque());
         ret.setCarburant(join((CrudRepository<Carburant, String>) carburantRepo, detail.getCarburant(), "Carburant").getCarburant());
@@ -145,6 +162,78 @@ public class AnnonceServices {
         LocalDateTime localDateTime = LocalDateTime.now();
         v.setDateValidation(Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant()));
         voitureRepository.save(v);
+    }
+
+    private Annonce build(Detail_annonce d){
+        Annonce ret = new Annonce();
+        ret.setDetailAnnonce(d);
+        ret.setVoiture(voitureRepository.findByCaracteristiqueID(d.get_id()));
+        return ret;
+    }
+
+    private Annonce buildFromV(Voiture v){
+        Annonce ret = new Annonce();
+        ret.setDetailAnnonce(annonceRepository.findById(v.getCaracteristiqueID()).get());
+        ret.setVoiture(v);
+        return ret;
+    }
+
+    public List<Annonce> recherche(String i){
+        List<Annonce> r = new ArrayList<>();
+        MongoDatabase database = client.getDatabase("voiture");
+        MongoCollection<Document> collection = database.getCollection("detail");
+        AggregateIterable<Document> result = collection.aggregate(Arrays.asList(new Document("$search",
+                new Document("text",
+                        new Document("query", i)
+                                .append("path", Arrays.asList("marque", "description_supplementaire", "modele", "categorie", "carburant", "transmission"))))));
+        result.forEach(doc -> r.add(build(converter.read(Detail_annonce.class, doc))));
+        return r;
+    }
+
+    private List<Annonce> searchNosql(Recherche r){
+        List<Annonce> a = new ArrayList<>();
+        Recherche recherche = new Recherche(carburantRepo, categorieRepo, transmissionRepo);
+        if(r.getCategorie() == null || r.getCategorie().length == 0)r.setCategorie(recherche.getCategorie());
+        if(r.getCarburant() == null ||r.getCarburant().length == 0)r.setCarburant(recherche.getCarburant());
+        if(r.getTransmission() == null ||r.getTransmission().length == 0)r.setTransmission(recherche.getTransmission());
+        for(Detail_annonce d : annonceRepository.findAllByMarqueLikeIgnoreCaseAndModeleLikeIgnoreCaseAndKilometrageBetweenAndPlacesGreaterThanEqualAndCategorieInAndCarburantInAndTransmissionIn(r.getMarque(), r.getModele(), r.getKmin(), r.getKmax(), r.getPlace(), r.getCategorie(), r.getCarburant(), r.getTransmission())){
+            a.add(build(d));
+        }
+        return a;
+    }
+
+    private List<Annonce> searchSql(Recherche recherche){
+        List<Annonce> a = new ArrayList<>();
+        for(Voiture v : voitureRepository.findAllByPrixBetween(recherche.getPrixmin(), recherche.getPrixmax())){
+            a.add(buildFromV(v));
+        }
+        return a;
+    }
+
+    public List<Annonce> filtrer(Recherche r){
+        List<Annonce> a1 = searchNosql(r);
+        List<Annonce> a2 = searchSql(r);
+        List<Annonce> intersectionModels = a1.stream()
+                .filter(model -> a2.stream().anyMatch(car -> car.getVoiture().getId().equals(model.getVoiture().getId())))
+                .collect(Collectors.toList());
+        return intersectionModels;
+    }
+
+    public void addFavoris(int id) throws Exception {
+        Voiture v = voitureRepository.findById(id).orElseThrow(() -> new Exception("Annonce non trouvé."));
+        Utilisateur u = utilisateurRepository.findById((Integer) SecurityContextHolder.getContext().getAuthentication().getCredentials()).get();
+        Favoris f = new Favoris();
+        f.setUtilisateur(u);
+        f.setVoiture(v);
+        favorisRepo.save(f);
+    }
+
+    public List<Annonce> getFavoris(){
+        List<Annonce> ret = new ArrayList<>();
+        for(Favoris favoris : favorisRepo.findAllByUtilisateur(utilisateurRepository.findById((Integer)SecurityContextHolder.getContext().getAuthentication().getCredentials()).get())){
+            ret.add(buildFromV(favoris.getVoiture()));
+        }
+        return ret;
     }
 
     // 100 - 200 - 210 - 300 - 310
