@@ -53,9 +53,9 @@ public class AnnonceController {
         return annonceServices.getAnnonces();
     }
 
-    @GetMapping("/user/{id}/annonces")
-    public ResponseEntity<?> userAnnonce(@PathVariable int id){
-        if(id != (Integer)SecurityContextHolder.getContext().getAuthentication().getCredentials()) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Utilisateur non correspondant.");
+    @GetMapping("/user/annonces")
+    public ResponseEntity<?> userAnnonce(){
+        int id = (Integer)SecurityContextHolder.getContext().getAuthentication().getCredentials();
         return ResponseEntity.ok(annonceServices.userAnnonce(id));
     }
 
