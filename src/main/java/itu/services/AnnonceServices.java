@@ -109,10 +109,11 @@ public class AnnonceServices {
             voitures = voitureRepository.findAllByEtat(200);
         }
         List<Annonce> annonces = new ArrayList<>();
+        Utilisateur current = utilisateurRepository.findById((Integer)SecurityContextHolder.getContext().getAuthentication().getCredentials()).get();
         for(Voiture v : voitures){
             var a = new Annonce();
-            a.setDetailAnnonce(annonceRepository.findById(v.getCaracteristiqueID()).get());
-            a.setVoiture(v);
+            a = buildFromV(v);
+            a.setFavorite(favorisRepo.existsByUtilisateurAndVoiture(current, v));
             annonces.add(a);
         }
         return annonces;

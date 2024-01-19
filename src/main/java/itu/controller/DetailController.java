@@ -276,4 +276,14 @@ public class DetailController {
     public Commission getCommission(){
         return voitureServices.getCommission();
     }
+
+    @PutMapping("/voitures/{id}")
+    public ResponseEntity vendue(@PathVariable(name = "id") int id){
+        try {
+            voitureServices.changeStatus(id);
+            return ResponseEntity.ok("Statut changé.");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+    }
 }

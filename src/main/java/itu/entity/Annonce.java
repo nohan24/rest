@@ -10,4 +10,5 @@ import lombok.Setter;
 public class Annonce {
     private Voiture voiture;
     private Detail_annonce detailAnnonce;
+    private boolean isFavorite;
 }

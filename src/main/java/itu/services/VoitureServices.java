@@ -2,9 +2,11 @@ package itu.services;
 
 import itu.entity.nosql.*;
 import itu.entity.sql.Commission;
+import itu.entity.sql.Voiture;
 import itu.repository.CommissionRepo;
 import itu.repository.nosql.*;
 import itu.repository.VoitureRepository;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -157,5 +159,15 @@ public class VoitureServices {
 
     public Commission getCommission(){
         return commissionRepo.findAll().get(0);
+    }
+
+    public void changeStatus(int id) throws Exception {
+        Voiture v = voitureRepository.findById(id).orElseThrow(() -> new Exception("Voiture non trouvé."));
+        if(v.getOwner() == (Integer)SecurityContextHolder.getContext().getAuthentication().getCredentials()){
+        v.setEtat(300);
+        voitureRepository.save(v);
+        }else{
+            throw new Exception("Veuillez sélectionner une de vos annonces.");
+        }
     }
 }
