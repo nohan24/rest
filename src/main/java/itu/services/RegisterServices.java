@@ -15,7 +15,11 @@ public class RegisterServices {
         this.utilisateurRepository = utilisateurRepository;
     }
 
-    public Utilisateur register(String email, String password, String date_naissance, int sexe, String username){
+    public Utilisateur register(String email, String password, String date_naissance, Integer sexe, String username) throws Exception {
+        if(password.isEmpty())throw new Exception("Mot de passe requis.");
+        if(username.isEmpty())throw new Exception("Username requis.");
+        if(sexe == null)throw new Exception("Genre requis.");
+        if(!sexe.toString().equals("1") && !sexe.toString().equals("2")) throw new Exception("Genre non accepté.è");
         Utilisateur u = new Utilisateur();
         BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
         u.setEmail(email);

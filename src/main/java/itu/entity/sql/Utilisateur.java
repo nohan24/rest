@@ -14,11 +14,18 @@ public class Utilisateur {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "myseq")
     @SequenceGenerator(name="myseq",sequenceName="utilisateur_seq", allocationSize = 1)
     private int id_utilisateur;
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
     private String email;
+    @Column(nullable = false)
+
     private String password;
+    @Column(nullable = false)
+
     private int genre;
+    @Column(nullable = false)
+
     private String username;
+    @Column(nullable = false)
     private Date date_naissance;
     @Column(nullable = false)
     private String roles = "USER";

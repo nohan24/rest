@@ -48,12 +48,17 @@ public class AuthController {
     }
 
     @PostMapping("/auth/register")
-    public ResponseEntity register(String email, String password, int genre, String date_naissance, String username){
-        date_naissance = date_naissance.replaceAll("-","/");
-        Utilisateur u = registerServices.register(email, password, date_naissance, genre, username);
-        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
-        String token = jwtUtil.createToken(u);
-        LoginRes loginRes = new LoginRes(email,token);
-        return ResponseEntity.ok(loginRes);
+    public ResponseEntity register(String email, String password, Integer genre, String date_naissance, String username){
+        try{
+            date_naissance = date_naissance.replaceAll("-","/");
+            Utilisateur u = registerServices.register(email, password, date_naissance, genre, username);
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
+            String token = jwtUtil.createToken(u);
+            LoginRes loginRes = new LoginRes(email,token);
+            return ResponseEntity.ok(loginRes);
+        }catch(Exception e){
+            if(e.getMessage().contains("duplicate"))return ResponseEntity.badRequest().body("Email déjà utilisé.");
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 }
