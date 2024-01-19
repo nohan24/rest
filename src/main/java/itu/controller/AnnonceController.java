@@ -55,7 +55,7 @@ public class AnnonceController {
 
     @GetMapping("/user/annonces")
     public ResponseEntity<?> userAnnonce(){
-        int id = (Integer)SecurityContextHolder.getContext().getAuthentication().getCredentials();
+        int id = (Integer)SecurityContextHolder.getContext().getAuthentication().getCredentials()   ;
         return ResponseEntity.ok(annonceServices.userAnnonce(id));
     }
 
@@ -73,7 +73,7 @@ public class AnnonceController {
     @DeleteMapping("/validation/annonces/{id}")
     public ResponseEntity refuse(@PathVariable(name = "id") int id){
         annonceServices.refuser(id);
-        return ResponseEntity.ok("Validé");
+        return ResponseEntity.ok("Annonce refusé.");
     }
 
     @GetMapping("/annonces/{id}")
