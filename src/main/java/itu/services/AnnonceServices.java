@@ -103,19 +103,25 @@ public class AnnonceServices {
 
     public List<Annonce> getAnnonces(){
         List<Voiture> voitures = new ArrayList<>();
+        List<Annonce> annonces = new ArrayList<>();
         if(SecurityContextHolder.getContext().getAuthentication().getCredentials() instanceof Integer){
             voitures = voitureRepository.findAllByOwnerIsNotAndEtat((Integer)SecurityContextHolder.getContext().getAuthentication().getCredentials(), 200);
+            Utilisateur current = utilisateurRepository.findById((Integer)SecurityContextHolder.getContext().getAuthentication().getCredentials()).get();
+            for(Voiture v : voitures){
+                var a = new Annonce();
+                a = buildFromV(v);
+                a.setFavorite(favorisRepo.existsByUtilisateurAndVoiture(current, v));
+                annonces.add(a);
+            }
         }else{
             voitures = voitureRepository.findAllByEtat(200);
+            for(Voiture v : voitures){
+                var a = new Annonce();
+                a = buildFromV(v);
+                annonces.add(a);
+            }
         }
-        List<Annonce> annonces = new ArrayList<>();
-        Utilisateur current = utilisateurRepository.findById((Integer)SecurityContextHolder.getContext().getAuthentication().getCredentials()).get();
-        for(Voiture v : voitures){
-            var a = new Annonce();
-            a = buildFromV(v);
-            a.setFavorite(favorisRepo.existsByUtilisateurAndVoiture(current, v));
-            annonces.add(a);
-        }
+
         return annonces;
     }
 
