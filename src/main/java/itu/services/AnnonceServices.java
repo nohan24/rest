@@ -9,10 +9,9 @@ import itu.entity.Recherche;
 import itu.entity.nosql.*;
 import itu.entity.sql.Favoris;
 import itu.entity.sql.Utilisateur;
+import itu.entity.sql.Vente;
 import itu.entity.sql.Voiture;
-import itu.repository.FavorisRepo;
-import itu.repository.UtilisateurRepository;
-import itu.repository.VoitureRepository;
+import itu.repository.*;
 import itu.repository.nosql.*;
 import jakarta.persistence.EntityNotFoundException;
 import org.bson.Document;
@@ -20,6 +19,7 @@ import org.springframework.data.mongodb.core.convert.MongoConverter;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -44,7 +44,9 @@ public class AnnonceServices {
     private final ImageServices imageServices;
     private final VoitureRepository voitureRepository;
     final UtilisateurRepository utilisateurRepository;
-    public AnnonceServices(MongoClient client, FavorisRepo favorisRepo, MongoConverter converter, ModeleRepo modeleRepo, CarburantRepo carburantRepo, TransmissionRepo transmissionRepo, CategorieRepo categorieRepo, MarqueRepo marqueRepo, EquipementRepo equipementRepo, AnnonceRepository annonceRepository, ImageServices imageServices, VoitureRepository voitureRepository, UtilisateurRepository utilisateurRepository) {
+    final CommissionRepo commissionRepo;
+    final VenteRepo venteRepo;
+    public AnnonceServices(MongoClient client, FavorisRepo favorisRepo, MongoConverter converter, ModeleRepo modeleRepo, CarburantRepo carburantRepo, TransmissionRepo transmissionRepo, CategorieRepo categorieRepo, MarqueRepo marqueRepo, EquipementRepo equipementRepo, AnnonceRepository annonceRepository, ImageServices imageServices, VoitureRepository voitureRepository, UtilisateurRepository utilisateurRepository, CommissionRepo commissionRepo, VenteRepo venteRepo) {
         this.client = client;
         this.favorisRepo = favorisRepo;
         this.converter = converter;
@@ -58,6 +60,8 @@ public class AnnonceServices {
         this.imageServices = imageServices;
         this.voitureRepository = voitureRepository;
         this.utilisateurRepository = utilisateurRepository;
+        this.commissionRepo = commissionRepo;
+        this.venteRepo = venteRepo;
     }
 
     private <T> T join(CrudRepository<T, String> repository, String id, String entityName) throws Exception {
@@ -241,6 +245,21 @@ public class AnnonceServices {
             ret.add(buildFromV(favoris.getVoiture()));
         }
         return ret;
+    }
+
+    double calculCommission(double prix){
+        return prix * commissionRepo.findAll().get(0).getValeur() / 100;
+    }
+
+    @Transactional
+    public void vendre(int id) throws Exception {
+        Voiture v = voitureRepository.findById(id).get();
+        if(v.getOwner() != (Integer)SecurityContextHolder.getContext().getAuthentication().getCredentials()) throw new Exception("Ceci n'est pas votre voiture.");
+        v.setEtat(300);
+        Vente vente = new Vente();
+        vente.setCommission(calculCommission(v.getPrix()));
+        vente.setUtilisateur(utilisateurRepository.findById((Integer)SecurityContextHolder.getContext().getAuthentication().getCredentials()).get());
+        venteRepo.save(vente);
     }
 
     // 100 - 200 - 210 - 300 - 310

@@ -111,4 +111,13 @@ public class AnnonceController {
         return ResponseEntity.ok(annonceServices.getFavoris());
     }
 
+    @PutMapping("/annonces/{id}/vendu")
+    public ResponseEntity vendue(@PathVariable(name = "id") int id){
+        try {
+            annonceServices.vendre(id);
+            return ResponseEntity.ok("Voiture vendue.");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
 }

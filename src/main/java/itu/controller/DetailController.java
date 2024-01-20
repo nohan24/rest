@@ -35,7 +35,7 @@ public class DetailController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
-
+ 
     @GetMapping("/marques")
     public List<Marque> allMarques(){
         return voitureServices.getMarques();

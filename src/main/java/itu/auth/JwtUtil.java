@@ -4,6 +4,7 @@ import io.jsonwebtoken.*;
 import itu.entity.sql.Utilisateur;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.core.env.Environment;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
