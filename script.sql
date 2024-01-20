@@ -1,0 +1,1 @@
+create view statannonce as select m.*,coalesce(s.count, 0) as total from mois m left outer join (select extract(month from date_creation) as mois,count(*) from voiture group by mois) as s on m.mois = s.mois;

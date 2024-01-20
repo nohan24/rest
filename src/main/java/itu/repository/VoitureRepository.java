@@ -12,7 +12,7 @@ public interface VoitureRepository extends JpaRepository<Voiture, Integer> {
     List<Voiture> findAllByOwner(int id);
     Voiture findByCaracteristiqueID(String c);
     @Query("SELECT count(*) FROM Voiture where etat = 200")
-    long countByEtat();
+    int countByEtat();
 
     List<Voiture> findAllByPrixBetween(int min, long max);
 
