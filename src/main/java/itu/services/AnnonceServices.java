@@ -259,7 +259,7 @@ public class AnnonceServices {
     @Transactional
     public void vendre(int id) throws Exception {
         Voiture v = voitureRepository.findById(id).get();
-        if(v.getEtat() != 200)throw new Exception("Cette voiture n'a pas encore été validé.");
+        if(v.getEtat() != 200)throw new Exception("Cette voiture ne peut pas être vendue.");
         if(v.getOwner() != (Integer)SecurityContextHolder.getContext().getAuthentication().getCredentials()) throw new Exception("Ceci n'est pas votre voiture.");
         v.setEtat(300);
         Vente vente = new Vente();
