@@ -32,6 +32,7 @@ public class StatServices {
         ret.setVente(vente);
         ret.setAnnonce_vente((double) (vente * 100) / voitureRepository.count());
         List<StatAnnonce> stats = statAnnonceRepo.findAll();
+        ret.setTotalprix(venteRepo.sum());
         double total = StatAnnonce.somme(stats);
         for(StatAnnonce s : stats){
             s.setTotal(s.getTotal() * 100 / total);

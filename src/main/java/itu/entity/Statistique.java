@@ -13,4 +13,5 @@ public class Statistique {
     int vente;
     double annonce_vente;
     List<StatAnnonce> annonces;
+    double totalprix;
 }
