@@ -6,6 +6,8 @@ import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 @Entity
 @Table(name = "statannonce")
 @Getter
@@ -14,5 +16,14 @@ public class StatAnnonce {
     @Id
     private Integer mois;
     String designation;
-    int total;
+    double total;
+
+    public static double somme(List<StatAnnonce> s){
+        double ret = 0;
+        for(StatAnnonce stat : s){
+            ret += stat.total;
+        }
+
+        return ret;
+    }
 }
