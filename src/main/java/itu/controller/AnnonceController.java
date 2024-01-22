@@ -111,6 +111,12 @@ public class AnnonceController {
         return ResponseEntity.ok(annonceServices.getFavoris());
     }
 
+    @DeleteMapping("/annonces/{id}/favoris")
+    public ResponseEntity deleteFav(@PathVariable(name = "id")int id){
+        annonceServices.deleteFavoris(id);
+        return ResponseEntity.ok("Annonce retirée des favoris.");
+    }
+
     @PutMapping("/annonces/{id}/vendu")
     public ResponseEntity vendue(@PathVariable(name = "id") int id){
         try {

@@ -11,7 +11,7 @@ public class Favoris {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "myseq")
     @SequenceGenerator(name="myseq",sequenceName="favoris_seq", allocationSize = 1)
-    private Long id;
+    private int id;
     @ManyToOne
     @JoinColumn(name = "utilisateur_id")
     private Utilisateur utilisateur;
@@ -19,11 +19,11 @@ public class Favoris {
     @JoinColumn(name = "voiture_id")
     private Voiture voiture;
 
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
-    public Long getId() {
+    public int getId() {
         return id;
     }
 }

@@ -3,7 +3,6 @@ package itu.entity;
 import itu.entity.sql.StatAnnonce;
 import lombok.Getter;
 import lombok.Setter;
-
 import java.util.List;
 
 @Getter

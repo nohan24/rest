@@ -227,6 +227,7 @@ public class AnnonceServices {
         List<Annonce> intersectionModels = a1.stream()
                 .filter(model -> a2.stream().anyMatch(car -> car.getVoiture().getId().equals(model.getVoiture().getId())))
                 .collect(Collectors.toList());
+
         return intersectionModels;
     }
 
@@ -247,6 +248,10 @@ public class AnnonceServices {
         return ret;
     }
 
+    public void deleteFavoris(int idAnnonce){
+        favorisRepo.deleteByUtilisateurAndVoiture(utilisateurRepository.findById((Integer)SecurityContextHolder.getContext().getAuthentication().getCredentials()).get(), voitureRepository.findById(idAnnonce).get());
+    }
+
     double calculCommission(double prix){
         return prix * commissionRepo.findAll().get(0).getValeur() / 100;
     }
@@ -254,13 +259,13 @@ public class AnnonceServices {
     @Transactional
     public void vendre(int id) throws Exception {
         Voiture v = voitureRepository.findById(id).get();
+        if(v.getEtat() != 200)throw new Exception("Cette voiture n'a pas encore été validé.");
         if(v.getOwner() != (Integer)SecurityContextHolder.getContext().getAuthentication().getCredentials()) throw new Exception("Ceci n'est pas votre voiture.");
         v.setEtat(300);
         Vente vente = new Vente();
+        vente.setVoiture(v);
         vente.setCommission(calculCommission(v.getPrix()));
         vente.setUtilisateur(utilisateurRepository.findById((Integer)SecurityContextHolder.getContext().getAuthentication().getCredentials()).get());
         venteRepo.save(vente);
     }
-
-    // 100 - 200 - 210 - 300 - 310
 }
