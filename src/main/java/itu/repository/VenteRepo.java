@@ -7,6 +7,6 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 public interface VenteRepo extends JpaRepository<Vente, Integer> {
-    @Query("select sum(v.prix) from Voiture v")
+    @Query("select sum(v.commission) from Vente v")
     double sum();
 }
