@@ -51,6 +51,7 @@ public class SecurityConfig {
                     .authorizeHttpRequests(request -> request.requestMatchers(HttpMethod.POST,"/annonces/**").hasRole("USER"))
                     .authorizeHttpRequests(request -> request.requestMatchers(HttpMethod.DELETE,"/annonces/**").hasRole("USER"))
                     .authorizeHttpRequests(request -> request.requestMatchers("/statistiques/**").hasRole("ADMIN"))
+                    .authorizeHttpRequests(request -> request.requestMatchers("/token").hasRole("USER"))
                     .authorizeHttpRequests(request -> request.requestMatchers("/images/**").permitAll())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class)
