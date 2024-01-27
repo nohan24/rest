@@ -9,5 +9,4 @@ public class MessageDTO {
     private Integer senderId;
     private Integer receiverId;
     private String messageContent;
-
 }

@@ -52,7 +52,7 @@ public class MessageController {
         }
     }
 
-    @GetMapping("/messages/{id}")
+    @GetMapping("/messages/chats/{id}")
     public ResponseEntity<List<Message>> getListMessageByIdChat(@PathVariable(name = "id")int senderId) throws Exception {
         try {
             return new ResponseEntity<List<Message>>(messageService.getListMessageByIdChat(senderId, (Integer) SecurityContextHolder.getContext().getAuthentication().getCredentials()), HttpStatus.OK);
