@@ -38,6 +38,7 @@ public class MessageController {
             PushNotificationRequest request = new PushNotificationRequest();
             request.setMessage(m.getMessageContent());
             request.setTitle(m.getUtilisateur().getUsername() + " vous a envoyé un message.");
+            request.setTopic("common");
             List<Mobile> ms = mobileRepo.findAllByUserid(messageDTO.getReceiverId());
             if(!ms.isEmpty()){
                 for(Mobile mobile : ms){
