@@ -12,6 +12,7 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.util.Arrays;
+import java.util.TimeZone;
 
 @SpringBootApplication
 public class BackofficeApplication {
@@ -32,6 +33,7 @@ public class BackofficeApplication {
 
     }
     public static void main(String[] args) {
+        TimeZone.setDefault(TimeZone.getTimeZone("GMT+3:00"));
         SpringApplication.run(BackofficeApplication.class, args);
     }
 
