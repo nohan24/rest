@@ -17,10 +17,10 @@ public class MobileFirebaseTokenController {
     }
 
     @PostMapping("/token")
-    public void saveToken(String mobiletoken){
+    public void saveToken(String token){
         Mobile m = new Mobile();
         m.setUserid((Integer) SecurityContextHolder.getContext().getAuthentication().getCredentials());
-        m.setToken(mobiletoken);
+        m.setToken(token);
         mobileRepo.save(m);
     }
 

@@ -7,6 +7,7 @@ import itu.repository.UtilisateurRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 
 @Service
@@ -14,20 +15,20 @@ public class ChatServiceImpl  implements ChatService {
 
     private final ChatRepository chatRepository;
 
-    private final UtilisateurRepository utilisateurRepository;
+    private final UtilisateurService userService;
 
-    public ChatServiceImpl(ChatRepository chatRepository, UtilisateurRepository utilisateurRepository) {
+    public ChatServiceImpl(ChatRepository chatRepository, UtilisateurService userService) {
         this.chatRepository = chatRepository;
-        this.utilisateurRepository = utilisateurRepository;
+        this.userService = userService;
     }
 
     public List<Chat> getChatByUserId(Integer user) {
-        Utilisateur u = utilisateurRepository.findById(user).get();
+        Utilisateur firstUser = userService.getUserById(user);
 
-        if(chatRepository.findByFirstUserIdOrSecondUserId(u, u).isEmpty() ) {
+        if(chatRepository.findByFirstUserIdOrSecondUserId(firstUser, firstUser).isEmpty() ) {
             throw new EntityNotFoundException("Pas encore de chat existant");
         } else {
-            return chatRepository.findByFirstUserIdOrSecondUserId(u, u);
+            return chatRepository.findByFirstUserIdOrSecondUserId(firstUser, firstUser);
         }
     }
 

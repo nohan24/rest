@@ -7,6 +7,7 @@ import itu.entity.sql.Message;
 import itu.entity.sql.Utilisateur;
 import itu.repository.ChatRepository;
 import itu.repository.MessageRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.sql.Timestamp;
 import java.util.List;
@@ -38,7 +39,6 @@ public class MessageServiceImpl implements MessageService {
         if(chatRepository.findByFirstUserIdAndSecondUserId(firstUser, secondUser).isEmpty()) {
             Chat myChat = new Chat(firstUser, secondUser);
             chatService.createChat(myChat);
-
             Message message = new Message(sender, time, messageDTO.getMessageContent(),myChat);
             return messageRepository.save(message);
         } else if(chatRepository.findByFirstUserIdAndSecondUserId(firstUser, secondUser).isPresent()){

@@ -1,10 +1,13 @@
 package itu.controller;
 
 import itu.DTO.MessageDTO;
+import itu.entity.PushNotificationRequest;
 import itu.entity.sql.Message;
+import itu.entity.sql.Mobile;
 import itu.repository.MessageRepository;
+import itu.repository.MobileRepo;
 import itu.services.MessageService;
-import org.springframework.beans.factory.annotation.Autowired;
+import itu.services.PushNotificationService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -15,18 +18,34 @@ import java.util.List;
 @RestController
 public class MessageController {
     private final MessageRepository messageRepository;
-
+    private final MobileRepo mobileRepo;
     private final MessageService messageService;
+    private final PushNotificationService pushNotificationService;
 
-    public MessageController(MessageRepository messageRepository, MessageService messageService) {
+
+    public MessageController(MessageRepository messageRepository, MobileRepo mobileRepo, MessageService messageService, PushNotificationService pushNotificationService) {
         this.messageRepository = messageRepository;
+        this.mobileRepo = mobileRepo;
         this.messageService = messageService;
+        this.pushNotificationService = pushNotificationService;
     }
 
     @PostMapping("/messages")
-    public ResponseEntity<Message> addMessage(@RequestBody MessageDTO messageDTO) throws IOException {
+    public ResponseEntity addMessage(@RequestBody MessageDTO messageDTO) throws IOException {
         try {
-            return new ResponseEntity<Message>(messageService.addMessage(messageDTO), HttpStatus.OK);
+            messageDTO.setSenderId((Integer)SecurityContextHolder.getContext().getAuthentication().getCredentials());
+            Message m = messageService.addMessage(messageDTO);
+            PushNotificationRequest request = new PushNotificationRequest();
+            request.setMessage(m.getMessageContent());
+            request.setTitle(m.getUtilisateur().getUsername() + " vous a envoyé un message.");
+            List<Mobile> ms = mobileRepo.findAllByUserid(messageDTO.getReceiverId());
+            if(!ms.isEmpty()){
+                for(Mobile mobile : ms){
+                    request.setToken(mobile.getToken());
+                    pushNotificationService.sendPushNotificationToToken(request);
+                }
+            }
+            return ResponseEntity.ok(m);
         } catch (Exception e) {
             return new ResponseEntity(e.getMessage(), HttpStatus.CONFLICT);
         }

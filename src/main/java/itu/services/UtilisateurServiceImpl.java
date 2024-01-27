@@ -5,18 +5,21 @@ import itu.repository.UtilisateurRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class UtilisateurServiceImpl implements UtilisateurService{
-    @Autowired
-    private UtilisateurRepository userRepo;
+    private final UtilisateurRepository userRepo;
 
-   public Utilisateur getUserById(Integer userId) {
-        Utilisateur u = userRepo.findById(userId)
+    public UtilisateurServiceImpl(UtilisateurRepository userRepo) {
+        this.userRepo = userRepo;
+    }
+
+    public Utilisateur getUserById(Integer userId) {
+       return userRepo.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("Utilisateur non trouvé avec l'ID : " + userId));
-        return u;
     }
 
     public Utilisateur addUser(Utilisateur utilisateur) {

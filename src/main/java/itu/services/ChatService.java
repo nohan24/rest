@@ -1,6 +1,7 @@
 package itu.services;
 
 import itu.entity.sql.Chat;
+
 import java.util.List;
 
 public interface ChatService {
