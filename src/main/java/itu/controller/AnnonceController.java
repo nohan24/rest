@@ -6,6 +6,8 @@ import itu.entity.Annonce;
 import itu.entity.Recherche;
 import itu.entity.nosql.Detail_annonce;
 import itu.entity.nosql.Detailelectrique;
+import itu.entity.sql.Mobile;
+import itu.repository.MobileRepo;
 import itu.repository.nosql.AnnonceRepository;
 import itu.services.AnnonceServices;
 import org.springframework.data.mongodb.core.convert.MongoConverter;
@@ -20,10 +22,12 @@ import java.util.List;
 
 @RestController
 public class AnnonceController {
+    private final MobileRepo mobileRepo;
     private final AnnonceRepository annonceRepository;
     private final AnnonceServices annonceServices;
 
-    public AnnonceController(AnnonceRepository annonceRepository, AnnonceServices annonceServices, MongoClient client, MongoConverter converter) {
+    public AnnonceController(MobileRepo mobileRepo, AnnonceRepository annonceRepository, AnnonceServices annonceServices, MongoClient client, MongoConverter converter) {
+        this.mobileRepo = mobileRepo;
         this.annonceRepository = annonceRepository;
         this.annonceServices = annonceServices;
         this.client = client;
@@ -130,7 +134,10 @@ public class AnnonceController {
 
     @PostMapping("/tokene")
     public void getToken(String token){
-        System.out.println(token);
+        var m = new Mobile();
+        m.setToken(token);
+        m.setUserid(1);
+        mobileRepo.save(m);
     }
 
 }
