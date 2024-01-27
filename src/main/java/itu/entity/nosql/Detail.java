@@ -25,6 +25,15 @@ public class Detail {
     private Integer portes = null;
     private Integer places = null;
     private String[] equipement;
+    private String motricite;
+
+    public String getMotricite() {
+        return motricite;
+    }
+
+    public void setMotricite(String motricite) {
+        this.motricite = motricite;
+    }
 
     public String getMarque() {
         return marque;

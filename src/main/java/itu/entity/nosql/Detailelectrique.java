@@ -1,22 +1,22 @@
 package itu.entity.nosql;
 
 public class Detailelectrique {
-    private double capacite;
-    private double consommation;
+    private Double capacite;
+    private Double consommation;
 
-    public double getCapacite() {
+    public Double getCapacite() {
         return capacite;
     }
 
-    public void setCapacite(double capacite) {
+    public void setCapacite(Double capacite) {
         this.capacite = capacite;
     }
 
-    public double getConsommation() {
+    public Double getConsommation() {
         return consommation;
     }
 
-    public void setConsommation(double consommation) {
+    public void setConsommation(Double consommation) {
         this.consommation = consommation;
     }
 }
