@@ -23,10 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -79,6 +76,10 @@ public class AnnonceServices {
     }
 
     public Detail_annonce insertAnnonce(Detail_annonce detail, Detailelectrique detailelectrique, List<MultipartFile> images, double prix) throws Exception {
+        if(images.isEmpty())throw new Exception("Im;ages requis.");
+        for(MultipartFile f : images){
+            if(!Objects.requireNonNull(f.getContentType()).contains("image"))throw new Exception("Images requis.");
+        }
         if(detail.getPlaces() == null || detail.getPlaces() == 0)throw new Exception("Nombre de place requis.");
         Detail_annonce ret = detail;
         if(detail.getTitre_voiture() == null)throw new Exception("Titre annonce requis.");
@@ -118,7 +119,7 @@ public class AnnonceServices {
                 annonces.add(a);
             }
         }else{
-            voitures = voitureRepository.findAllByEtat(200);
+            voitures = voitureRepository.findAllByEtatOrderByDateCreationDesc(200);
             for(Voiture v : voitures){
                 var a = new Annonce();
                 a = buildFromV(v);
@@ -131,7 +132,7 @@ public class AnnonceServices {
 
     public List<Annonce> annonceNotValidate(){
         List<Annonce> annonces = new ArrayList<>();
-        for(Voiture v : voitureRepository.findAllByEtat(100)){
+        for(Voiture v : voitureRepository.findAllByEtatOrderByDateCreationDesc(100)){
             var a = new Annonce();
             a.setDetailAnnonce(annonceRepository.findById(v.getCaracteristiqueID()).get());
             a.setVoiture(v);

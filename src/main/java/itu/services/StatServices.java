@@ -26,7 +26,7 @@ public class StatServices {
     public Statistique getStat(){
         int vente = (int) venteRepo.count();
         Statistique ret = new Statistique();
-        ret.setUtilisateur((int) utilisateurRepository.count());
+        ret.setUtilisateur(utilisateurRepository.countByRoles("USER"));
         ret.setAnnonce(voitureRepository.countByEtat());
         ret.setVente(vente);
         ret.setAnnonce_vente((double) (vente * 100) / voitureRepository.count());

@@ -53,7 +53,8 @@ public class SecurityConfig {
                     .authorizeHttpRequests(request -> request.requestMatchers("/statistiques/**").hasRole("ADMIN"))
                     .authorizeHttpRequests(request -> request.requestMatchers("/token").hasRole("USER"))
                     .authorizeHttpRequests(request -> request.requestMatchers("/images/**").permitAll())
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                    .authorizeHttpRequests(request -> request.requestMatchers(HttpMethod.POST, "/tokene").permitAll())
+                    .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class)
                     .exceptionHandling((e) -> e.authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)));
             return http.build();

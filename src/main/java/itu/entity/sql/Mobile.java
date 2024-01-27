@@ -12,6 +12,6 @@ public class Mobile {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "voiture_generator")
     @SequenceGenerator(name = "voiture_generator", sequenceName = "token_seq", allocationSize = 1)
     private Integer id;
-    private Integer userid;
+    private Integer userid; 
     private String token;
 }

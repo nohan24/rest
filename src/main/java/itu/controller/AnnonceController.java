@@ -48,6 +48,7 @@ public class AnnonceController {
         }
     }
 
+
     @GetMapping("/annonces")
     public List<Annonce> getAnnonces(){
         return annonceServices.getAnnonces();
@@ -126,4 +127,10 @@ public class AnnonceController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+
+    @PostMapping("/tokene")
+    public void getToken(String token){
+        System.out.println(token);
+    }
+
 }

@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 public interface VoitureRepository extends JpaRepository<Voiture, Integer> {
-    List<Voiture> findAllByEtat(int etat);
+    List<Voiture> findAllByEtatOrderByDateCreationDesc(int etat);
     List<Voiture> findAllByOwnerIsNotAndEtat(int id, int etat);
     List<Voiture> findAllByOwner(int id);
     Voiture findByCaracteristiqueID(String c);
