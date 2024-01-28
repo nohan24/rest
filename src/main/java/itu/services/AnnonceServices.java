@@ -75,6 +75,10 @@ public class AnnonceServices {
         return ret;
     }
 
+    void chekcModele(String modele, String marque) throws Exception {
+        if(!modeleRepo.existsByMarqueAndModele(modele, marque))throw new Exception("Le modèle ne correspond pas à la marque.");
+    }
+
     public Detail_annonce insertAnnonce(Detail_annonce detail, Detailelectrique detailelectrique, List<MultipartFile> images, double prix) throws Exception {
         if(images.isEmpty())throw new Exception("Im;ages requis.");
         for(MultipartFile f : images){
@@ -90,6 +94,7 @@ public class AnnonceServices {
         ret.setCategorie(join((CrudRepository<Categorie, String>)categorieRepo, detail.getCategorie(), "Categorie").getCategorie());
         ret.setTransmission(join((CrudRepository<Transmission, String>)transmissionRepo, detail.getTransmission(), "Transmission").getTransmission());
         ret.setModele(join((CrudRepository<ModeleBase, String>)modeleRepo, detail.getModele(),"Modele").getModele());
+        chekcModele(ret.getModele(), ret.getMarque());
         if(detail.getEquipement() != null) {
             detail.setEquipement(Arrays.stream(detail.getEquipement())
                     .distinct()
