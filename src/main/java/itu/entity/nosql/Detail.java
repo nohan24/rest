@@ -25,15 +25,6 @@ public class Detail {
     private Integer portes = null;
     private Integer places = null;
     private String[] equipement;
-    private String motricite;
-
-    public String getMotricite() {
-        return motricite;
-    }
-
-    public void setMotricite(String motricite) {
-        this.motricite = motricite;
-    }
 
     public String getMarque() {
         return marque;
@@ -108,7 +99,8 @@ public class Detail {
         return annee_fabrication;
     }
 
-    public void setAnnee_fabrication(Integer annee_fabrication) {
+    public void setAnnee_fabrication(Integer annee_fabrication) throws Exception {
+        if(annee_fabrication < 1970)throw new Exception("Année non valide.");
         this.annee_fabrication = annee_fabrication;
     }
 
