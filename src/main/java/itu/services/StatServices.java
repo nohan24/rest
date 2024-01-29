@@ -29,12 +29,21 @@ public class StatServices {
         ret.setUtilisateur(utilisateurRepository.countByRoles("USER"));
         ret.setAnnonce(voitureRepository.countByEtat());
         ret.setVente(vente);
-        ret.setAnnonce_vente((double) (vente * 100) / voitureRepository.count());
+        int countvoiture = (int) voitureRepository.count();
+        if(countvoiture != 0){
+            ret.setAnnonce_vente((double) (vente * 100) / voitureRepository.count());
+        }else{
+            ret.setAnnonce_vente(0);
+        }
         List<StatAnnonce> stats = statAnnonceRepo.findAll();
         ret.setTotalprix(venteRepo.sum());
         double total = StatAnnonce.somme(stats);
         for(StatAnnonce s : stats){
-            s.setTotal(s.getTotal() * 100 / total);
+            if(total != 0){
+                s.setTotal(s.getTotal() * 100 / total);
+            }else{
+                s.setTotal(0);
+            }
         }
         ret.setAnnonces(stats);
         return ret;
