@@ -76,11 +76,11 @@ public class AnnonceServices {
     }
 
     void chekcModele(String modele, String marque) throws Exception {
-        if(!modeleRepo.existsByMarqueAndModele(modele, marque))throw new Exception("Le modèle ne correspond pas à la marque.");
+        if(!modeleRepo.existsByMarqueAndModele(marque, modele))throw new Exception("Le modèle ne correspond pas à la marque.");
     }
 
     public Detail_annonce insertAnnonce(Detail_annonce detail, Detailelectrique detailelectrique, List<MultipartFile> images, double prix) throws Exception {
-        if(images.isEmpty())throw new Exception("Im;ages requis.");
+        if(images.isEmpty())throw new Exception("Images requis.");
         for(MultipartFile f : images){
             if(!Objects.requireNonNull(f.getContentType()).contains("image"))throw new Exception("Images requis.");
         }
@@ -233,7 +233,6 @@ public class AnnonceServices {
         List<Annonce> intersectionModels = a1.stream()
                 .filter(model -> a2.stream().anyMatch(car -> car.getVoiture().getId().equals(model.getVoiture().getId())))
                 .collect(Collectors.toList());
-
         return intersectionModels;
     }
 

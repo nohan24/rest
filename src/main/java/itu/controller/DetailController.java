@@ -2,6 +2,7 @@ package itu.controller;
 
 import itu.entity.nosql.*;
 import itu.entity.sql.Commission;
+import itu.repository.nosql.ModeleRepo;
 import itu.services.VoitureServices;
 import jakarta.annotation.security.RolesAllowed;
 import org.springframework.http.HttpStatus;
@@ -15,8 +16,10 @@ import java.util.List;
 @RestController
 public class DetailController {
     private final VoitureServices voitureServices;
-    public DetailController(VoitureServices voitureServices) {
+    private final ModeleRepo modeleRepo;
+    public DetailController(VoitureServices voitureServices, ModeleRepo modeleRepo) {
         this.voitureServices = voitureServices;
+        this.modeleRepo = modeleRepo;
     }
     @PostMapping("/marques")
     public ResponseEntity<?> insertMarque(String marque){
@@ -209,6 +212,11 @@ public class DetailController {
     @GetMapping("/modeles")
     public List<ModeleBase> allModeles(){
         return voitureServices.getModeles();
+    }
+
+    @GetMapping("/modeles/marques/{marque}")
+    public List<ModeleBase> findmodeles(@PathVariable(name = "marque")String marque){
+        return modeleRepo.findAllByMarque(marque);
     }
 
     @GetMapping("/modeles/{id}")
