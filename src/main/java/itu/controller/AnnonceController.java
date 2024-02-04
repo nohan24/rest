@@ -132,12 +132,4 @@ public class AnnonceController {
         }
     }
 
-    @PostMapping("/tokene")
-    public void getToken(String token){
-        var m = new Mobile();
-        m.setToken(token);
-        m.setUserid(1);
-        mobileRepo.save(m);
-    }
-
 }

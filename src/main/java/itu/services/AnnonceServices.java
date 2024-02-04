@@ -253,6 +253,7 @@ public class AnnonceServices {
         return ret;
     }
 
+    @Transactional
     public void deleteFavoris(int idAnnonce){
         favorisRepo.deleteByUtilisateurAndVoiture(utilisateurRepository.findById((Integer)SecurityContextHolder.getContext().getAuthentication().getCredentials()).get(), voitureRepository.findById(idAnnonce).get());
     }
