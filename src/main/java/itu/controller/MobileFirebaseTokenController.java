@@ -3,6 +3,7 @@ package itu.controller;
 import itu.entity.sql.Mobile;
 import itu.repository.MobileRepo;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,6 +26,7 @@ public class MobileFirebaseTokenController {
     }
 
     @DeleteMapping("/token/{token}")
+    @Transactional
     public void deleteToken(@PathVariable(name = "token")String token){
         mobileRepo.deleteByToken(token);
     }
