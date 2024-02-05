@@ -37,7 +37,7 @@ public class AnnonceController {
     final MongoConverter converter;
 
     @PostMapping("/annonces")
-    public ResponseEntity<?> insertAnnonce(@RequestPart(name = "images") List<MultipartFile> images, String detail, @RequestPart(name = "detailelectrique", required = false)String detailelectrique, double prix){
+    public ResponseEntity<?> insertAnnonce(List<MultipartFile> images, String detail, @RequestPart(name = "detailelectrique", required = false)String detailelectrique, double prix){
         ObjectMapper objectMapper = new ObjectMapper();
         Detail_annonce objet = null;
         Detailelectrique electrique = null;
