@@ -43,6 +43,8 @@ public class AnnonceController {
         Detailelectrique electrique = null;
         try {
             objet = objectMapper.readValue(detail, Detail_annonce.class);
+            if(objet.getTitre_voiture() == "" || objet.getTitre_voiture() == null)return ResponseEntity.badRequest().body("Titre de la voiture requise.");
+            
             electrique = detailelectrique != null ? objectMapper.readValue(detailelectrique, Detailelectrique.class) : null;
             return ResponseEntity.status(HttpStatus.OK).body(annonceServices.insertAnnonce(objet, electrique,images, prix));
         } catch (IOException e) {

@@ -82,6 +82,7 @@ public class AnnonceServices {
     public Detail_annonce insertAnnonce(Detail_annonce detail, Detailelectrique detailelectrique, List<MultipartFile> images, double prix) throws Exception {
         if(images.isEmpty())throw new Exception("Images requis.");
         for(MultipartFile f : images){
+            System.out.println();
             if(!Objects.requireNonNull(f.getContentType()).contains("image"))throw new Exception("Images requis.");
         }
         if(detail.getPlaces() == null || detail.getPlaces() == 0)throw new Exception("Nombre de place requis.");
@@ -202,7 +203,7 @@ public class AnnonceServices {
         AggregateIterable<Document> result = collection.aggregate(Arrays.asList(new Document("$search",
                 new Document("text",
                         new Document("query", i)
-                                .append("path", Arrays.asList("marque", "description_supplementaire", "modele", "categorie", "carburant", "transmission"))))));
+                                .append("path", Arrays.asList("marque","description_supplementaire", "modele", "categorie", "carburant", "transmission", "equipement"))))));
         result.forEach(doc -> r.add(build(converter.read(Detail_annonce.class, doc))));
         return r;
     }
