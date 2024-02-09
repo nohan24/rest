@@ -108,6 +108,7 @@ public class AnnonceServices {
         v.setCaracteristiqueID(ret.get_id());
         v.setPrix(prix);
         v.setOwner(Integer.parseInt(SecurityContextHolder.getContext().getAuthentication().getCredentials().toString()));
+        v.setUsername(utilisateurRepository.findById(v.getOwner()).get().getUsername());
         voitureRepository.save(v);
         return ret;
     }

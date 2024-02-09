@@ -21,6 +21,15 @@ public class Voiture {
     private double prix;
     @Column(nullable = false)
     private int owner;
+    private String username = "";
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
 
     public int getOwner() {
         return owner;
