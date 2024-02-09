@@ -14,6 +14,7 @@ public class Chat {
     @GeneratedValue (strategy = GenerationType.AUTO)
     @Column (name = "idChat")
     private Integer idChat;
+    private String last_message = "";
 
     @ManyToOne
     @JoinColumn(name="firstUserId", referencedColumnName = "id_utilisateur")

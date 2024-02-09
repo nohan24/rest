@@ -2,8 +2,10 @@ package itu.controller;
 
 import itu.DTO.MessageDTO;
 import itu.entity.PushNotificationRequest;
+import itu.entity.sql.Chat;
 import itu.entity.sql.Message;
 import itu.entity.sql.Mobile;
+import itu.repository.ChatRepository;
 import itu.repository.MessageRepository;
 import itu.repository.MobileRepo;
 import itu.services.MessageService;
@@ -18,13 +20,15 @@ import java.util.List;
 @RestController
 public class MessageController {
     private final MessageRepository messageRepository;
+    private final ChatRepository chatRepository;
     private final MobileRepo mobileRepo;
     private final MessageService messageService;
     private final PushNotificationService pushNotificationService;
 
 
-    public MessageController(MessageRepository messageRepository, MobileRepo mobileRepo, MessageService messageService, PushNotificationService pushNotificationService) {
+    public MessageController(MessageRepository messageRepository, ChatRepository chatRepository, MobileRepo mobileRepo, MessageService messageService, PushNotificationService pushNotificationService) {
         this.messageRepository = messageRepository;
+        this.chatRepository = chatRepository;
         this.mobileRepo = mobileRepo;
         this.messageService = messageService;
         this.pushNotificationService = pushNotificationService;
@@ -46,6 +50,9 @@ public class MessageController {
                     pushNotificationService.sendPushNotificationToToken(request);
                 }
             }
+            Chat c = m.getIdChat();
+            c.setLast_message(m.getMessageContent());
+            chatRepository.save(c);
             return ResponseEntity.ok(m);
         } catch (Exception e) {
             return new ResponseEntity(e.getMessage(), HttpStatus.CONFLICT);
@@ -60,4 +67,6 @@ public class MessageController {
             return new ResponseEntity(e.getMessage(), HttpStatus.CONFLICT);
         }
     }
+
+
 }
