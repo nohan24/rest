@@ -25,10 +25,10 @@ public class ChatServiceImpl  implements ChatService {
     public List<Chat> getChatByUserId(Integer user) {
         Utilisateur firstUser = userService.getUserById(user);
 
-        if(chatRepository.findByFirstUserIdOrSecondUserIdOrdOrderByLastSentDesc(firstUser, firstUser).isEmpty() ) {
+        if(chatRepository.findByFirstUserIdOrSecondUserIdOrderByLastSentDesc(firstUser, firstUser).isEmpty() ) {
             throw new EntityNotFoundException("Pas encore de chat existant");
         } else {
-            return chatRepository.findByFirstUserIdOrSecondUserIdOrdOrderByLastSentDesc(firstUser, firstUser);
+            return chatRepository.findByFirstUserIdOrSecondUserIdOrderByLastSentDesc(firstUser, firstUser);
         }
     }
 
