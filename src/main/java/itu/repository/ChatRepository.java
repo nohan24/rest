@@ -10,7 +10,7 @@ import java.util.Optional;
 
 @Repository
 public interface ChatRepository extends JpaRepository<Chat, Integer> {
-    List<Chat> findByFirstUserIdOrSecondUserId(Utilisateur firstUser, Utilisateur secondUser);
+    List<Chat> findByFirstUserIdOrSecondUserIdOrdOrderByLastSentDesc(Utilisateur firstUser, Utilisateur secondUser);
 
     Optional<Chat> findByFirstUserIdAndSecondUserId(Utilisateur firstUser, Utilisateur secondUser);
 
