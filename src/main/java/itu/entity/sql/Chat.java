@@ -4,6 +4,9 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -15,7 +18,7 @@ public class Chat {
     @Column (name = "idChat")
     private Integer idChat;
     private String last_message = "";
-
+    private LocalDateTime lastSent = LocalDateTime.now();;
     @ManyToOne
     @JoinColumn(name="firstUserId", referencedColumnName = "id_utilisateur")
     private Utilisateur firstUserId;
@@ -23,6 +26,7 @@ public class Chat {
     @ManyToOne
     @JoinColumn(name="SecondUserId", referencedColumnName = "id_utilisateur")
     private Utilisateur secondUserId;
+
 
     public Chat(Utilisateur firstUserId, Utilisateur secondUserId) {
         if(firstUserId.getId_utilisateur() < secondUserId.getId_utilisateur()) {

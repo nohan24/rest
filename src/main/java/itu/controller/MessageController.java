@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -51,6 +52,7 @@ public class MessageController {
                 }
             }
             Chat c = m.getIdChat();
+            c.setLastSent(LocalDateTime.now());
             c.setLast_message(m.getMessageContent());
             chatRepository.save(c);
             return ResponseEntity.ok(m);
