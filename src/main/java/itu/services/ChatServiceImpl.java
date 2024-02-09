@@ -6,6 +6,7 @@ import itu.repository.ChatRepository;
 import itu.repository.UtilisateurRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -28,7 +29,15 @@ public class ChatServiceImpl  implements ChatService {
         if(chatRepository.findByFirstUserIdOrSecondUserIdOrderByLastSentDesc(firstUser, firstUser).isEmpty() ) {
             throw new EntityNotFoundException("Pas encore de chat existant");
         } else {
-            return chatRepository.findByFirstUserIdOrSecondUserIdOrderByLastSentDesc(firstUser, firstUser);
+            List<Chat> cc = chatRepository.findByFirstUserIdOrSecondUserIdOrderByLastSentDesc(firstUser, firstUser);
+            for(Chat c : cc){
+                if(c.getFirstUserId().getId_utilisateur() == (Integer) SecurityContextHolder.getContext().getAuthentication().getCredentials()){
+                    c.getFirstUserId().setUsername("");
+                }else{
+                    c.getSecondUserId().setUsername("");
+                }
+            }
+            return cc;
         }
     }
 
