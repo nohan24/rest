@@ -232,10 +232,12 @@ public class AnnonceServices {
     public List<Annonce> filtrer(Recherche r){
         List<Annonce> a1 = searchNosql(r);
         List<Annonce> a2 = searchSql(r);
+        System.out.println(a1.size());
+        System.out.println(a2.size());
         List<Annonce> intersectionModels = a1.stream()
                 .filter(model -> a2.stream().anyMatch(car -> car.getVoiture().getId().equals(model.getVoiture().getId())))
                 .collect(Collectors.toList());
-        return intersectionModels;
+        return intersectionModels.stream().filter(i -> i.getVoiture().getEtat() == 200).collect(Collectors.toList());
     }
 
     public void addFavoris(int id) throws Exception {
